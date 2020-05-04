@@ -85,13 +85,13 @@ node {
         
         // now lets generate a report using our CLI and lets generate some direct links back to dynatrace
         dir ('dynatrace-cli') {
-            sh 'python3 dtcli.py dqlr srv tags/CONTEXTLESS:DockerService=SampleNodeJsStaging '+
+            sh 'python3 dtcli.py dqlr srv entityId=SERVICE-1FAFDD536F5B55D6 '+
                         'service.responsetime[avg%hour],service.responsetime[p90%hour] ${DT_URL} ${DT_TOKEN}'
             sh 'mv dqlreport.html dqlstagingreport.html'
             archiveArtifacts artifacts: 'dqlstagingreport.html', fingerprint: true
             
             // get the link to the service's dashboard and make it an artifact
-            sh 'python3 dtcli.py link srv tags/CONTEXTLESS:DockerService=SampleNodeJsStaging '+
+            sh 'python3 dtcli.py link srv entityId=SERVICE-1FAFDD536F5B55D6 '+
                         'overview 60:0 ${DT_URL} ${DT_TOKEN} > dtstagelinks.txt'
             archiveArtifacts artifacts: 'dtstagelinks.txt', fingerprint: true
         }
